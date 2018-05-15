@@ -1,0 +1,41 @@
+// 
+// Created by the DataSnap proxy generator.
+// 07/03/2018 21:26:53
+// 
+
+unit ClientClassesUnit1;
+
+interface
+
+uses System.JSON, Data.DBXCommon, Data.DBXClient, Data.DBXDataSnap, Data.DBXJSON, Datasnap.DSProxy, System.Classes, System.SysUtils, Data.DB, Data.SqlExpr, Data.DBXDBReaders, Data.DBXCDSReaders, Data.DBXJSONReflect;
+
+type
+  TServerMethods1Client = class(TDSAdminClient)
+  private
+  public
+    constructor Create(ADBXConnection: TDBXConnection); overload;
+    constructor Create(ADBXConnection: TDBXConnection; AInstanceOwner: Boolean); overload;
+    destructor Destroy; override;
+  end;
+
+implementation
+
+
+constructor TServerMethods1Client.Create(ADBXConnection: TDBXConnection);
+begin
+  inherited Create(ADBXConnection);
+end;
+
+
+constructor TServerMethods1Client.Create(ADBXConnection: TDBXConnection; AInstanceOwner: Boolean);
+begin
+  inherited Create(ADBXConnection, AInstanceOwner);
+end;
+
+
+destructor TServerMethods1Client.Destroy;
+begin
+  inherited;
+end;
+
+end.
