@@ -1,0 +1,78 @@
+unit vendas;
+
+interface
+
+uses
+  System.SysUtils, System.Types, System.UITypes, System.Classes, System.Variants,
+  FMX.Types, FMX.Controls, FMX.Forms, FMX.Graphics, FMX.Dialogs, FMX.Layouts,
+  FMX.Controls.Presentation, FMX.StdCtrls, Data.Bind.Controls,
+  Fmx.Bind.Navigator, FMX.Edit, FMX.ListView.Types, FMX.ListView.Appearances,
+  FMX.ListView.Adapters.Base, FMX.ListView, System.ImageList, FMX.ImgList,FMX.ANI,
+  System.Rtti, FMX.Grid.Style, FMX.ScrollBox, FMX.Grid, ClientModuleUnit1,
+  ClientClassesUnit1;
+
+type
+  TForm2 = class(TForm)
+    LayoutClient: TLayout;
+    ScrollBox1: TScrollBox;
+    ToolBar1: TToolBar;
+    ImageList1: TImageList;
+    procedure FormVirtualKeyboardHidden(Sender: TObject;
+      KeyboardVisible: Boolean; const Bounds: TRect);
+    procedure FormVirtualKeyboardShown(Sender: TObject;
+      KeyboardVisible: Boolean; const Bounds: TRect);
+
+  private
+    { Private declarations }
+  public
+    { Public declarations }
+  end;
+
+var
+  Form2: TForm2;
+  FTecladoShow: Boolean;
+
+implementation
+
+{$R *.fmx}
+{$R *.LgXhdpiPh.fmx ANDROID}
+
+
+
+
+
+
+procedure TForm2.FormVirtualKeyboardHidden(Sender: TObject;
+  KeyboardVisible: Boolean; const Bounds: TRect);
+begin
+  FTecladoShow := false;
+
+     if not KeyboardVisible then
+        AnimateFloat('Padding.Top', 0, 0.1);
+end;
+
+procedure TForm2.FormVirtualKeyboardShown(Sender: TObject;
+  KeyboardVisible: Boolean; const Bounds: TRect);
+  VAR O:TFMXObject;
+begin
+   FTecladoShow := true;
+
+     if Assigned(Focused) and (Focused.GetObject is TControl) then
+        if TControl(Focused).AbsoluteRect.Bottom - Padding.Top >= (Bounds.Top ) then
+        begin
+             //If switching between controls, the KeyboardHidden animation will run first
+             //and we'll see the form scroll up and then down.
+             //Calling StopPropertyAnimation jumps the first animation to it's final value - same problem
+             //Instead we need to search for the other animation and call StopAtCurrent.
+             for O in Children do
+                 if (O is TFloatAnimation) and (TFloatAnimation(O).PropertyName = 'Padding.Top') then
+                    TFloatAnimation(O).StopAtCurrent;
+
+             AnimateFloat('Padding.Top',Bounds.Top  - TControl(Focused).AbsoluteRect.Bottom + Padding.Top, 0.1)
+        end
+        else
+     else
+        AnimateFloat('Padding.Top', 0, 0.1);
+end;
+
+end.
